@@ -1,4 +1,79 @@
-# FPL points simulation
+# FPL Planner
+
+Project repository: [JudeHards/fpl-planner](https://github.com/JudeHards/fpl-planner).
+
+Estimate your current squad, screen transfer targets, and regenerate a single
+report with affordable one- and two-player packages. Everything runs locally with
+Python 3.10+ and the standard library. The scripts never submit FPL transfers.
+
+```sh
+python3 build_report.py
+```
+
+Open [the combined HTML report](reports/fpl-report.html) in a browser, or read
+[the Markdown report](reports/fpl-report.md) directly on GitHub. This command
+refreshes both analysis JSONs before compiling the report.
+
+```sh
+# Screen players and transfers separately:
+python3 find_transfers.py --json-output transfer-results.json
+
+# Replace the default £0.0m bank / one free transfer with actual values:
+python3 build_report.py --bank 1.5 --free-transfers 2
+
+# Compile saved outputs without rerunning analyses (uses their saved assumptions):
+python3 build_report.py --from-json
+```
+
+`find_transfers.py` defaults to a three-gameweek horizon and compares keeping the
+squad with immediate one- and two-player changes, held for that horizon. It uses
+the same fitted player and team rates as the simulation, with a faster analytic
+screening approximation. All gains are relative to that method's own holding
+baseline, after legal XI selection, captaincy, bench cover and transfer hits.
+
+The script checks position quotas, player uniqueness, the three-per-club limit
+and combined affordability. Two-player packages can fund an upgrade by selling a
+more expensive player elsewhere. Their search uses bounded shortlists, so the
+best result is the best found rather than a guaranteed global optimum. Holding
+is preferable when no tested move has a positive net gain. The model does not
+price the future value of saving a free transfer.
+
+Prices in `current-team.md` are **provisional selling values**, not verified FPL
+sale proceeds. To supply actual values, create a JSON object such as
+`{"Palmer": 9.6, "João Pedro": 7.4}` and use
+`--selling-prices selling-prices.json` with either transfer or report command.
+Prices and bank values are in millions of pounds. All future projections use the
+same pre-deadline training cutoff and the same local availability information;
+the model does not predict injury recovery.
+
+## GitHub and upstream data
+
+`FPL-Core-Insights/` is a Git submodule of the original upstream repository. Your
+scripts and reports live in your repository; the data is pinned to a reproducible
+upstream commit. Pulling data does not overwrite the analysis scripts.
+
+```sh
+# Clone your project with its pinned data:
+git clone --recurse-submodules https://github.com/JudeHards/fpl-planner.git
+cd fpl-planner
+
+# If already cloned without data:
+git submodule update --init --recursive
+
+# Refresh from upstream main, regenerate findings, and record the new pin:
+git submodule update --remote --merge FPL-Core-Insights
+python3 build_report.py
+git add FPL-Core-Insights simulation-results.json transfer-results.json reports/
+git commit -m "Refresh FPL data and findings"
+git push
+```
+
+Saved analyses include the team file's SHA-256 and data commit. Report compilation
+rejects mismatched outputs or a team/data checkout that has changed since they
+were generated. Keep custom analysis outside the submodule to make upstream
+updates straightforward.
+
+## Current-team simulation
 
 `simulate_points.py` estimates one gameweek's points for the 15 players in
 `current-team.md`, using the local `FPL-Core-Insights/data` CSVs. Python 3.10+

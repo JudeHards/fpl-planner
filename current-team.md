@@ -2,11 +2,11 @@
 
 Last updated: 9 October 2026
 
-Snapshot transcribed from the supplied team listing. Prices are associated with the player immediately following them in the pasted text. Raya's price was not included. Clubs and fixtures are preserved as supplied.
+Snapshot transcribed from the supplied team listing, with Raya's price subsequently supplied as £6.0m. Clubs and fixtures are preserved as supplied. Prices are provisional selling values for transfer analysis until checked against FPL.
 
 | Player | Club | Price | Opponent | Venue |
 | --- | --- | --- | --- | --- |
-| Raya | Arsenal | 6.0| Leeds | Home |
+| Raya | Arsenal | £6.0m | Leeds | Home |
 | Scherpen | Ipswich Town | £4.5m | Fulham | Home |
 | Calafiori | Arsenal | £5.7m | Leeds | Home |
 | Konsa | Arsenal | £4.5m | Leeds | Home |

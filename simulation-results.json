@@ -2,6 +2,8 @@
   "season": "2026-2027",
   "gameweek": 6,
   "deadline": "2026-10-10T10:00:00+00:00",
+  "team_sha256": "8c3c8fdad127db08535748715d93b80fd0695baf2184df6ebf934d844b08614c",
+  "data_revision": "bc54bccf0d63b0f7f8bbd476807254ed0eb10ed3",
   "team_file": "/Users/judehards/Documents/FPL/current-team.md",
   "data_directory": "/Users/judehards/Documents/FPL/FPL-Core-Insights/data",
   "training_gameweeks": [

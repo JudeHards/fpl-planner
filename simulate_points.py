@@ -26,12 +26,14 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import itertools
 import json
 import math
 import random
 import re
 import statistics
+import subprocess
 import sys
 import unicodedata
 from collections import Counter, defaultdict
@@ -269,7 +271,12 @@ def fit_team_strength(matches, target_rows):
     return fixtures, baseline, fallbacks
 
 
-def fit_players(team_rows, roster, teams, history, snapshots, warnings):
+def fit_players(team_rows, roster, teams, history, snapshots, warnings, validate_squad=True):
+    """Fit requested players; transfer screening can pass a league-wide list.
+
+    The simulator keeps squad validation on by default. Reusing the same fitting
+    routine for candidates avoids giving incoming players a different model.
+    """
     latest = max(r["_gw"] for rows in history.values() for r in rows)
     priors = defaultdict(lambda: defaultdict(float))
     prior_exposure = defaultdict(lambda: defaultdict(float))
@@ -353,7 +360,7 @@ def fit_players(team_rows, roster, teams, history, snapshots, warnings):
                               availability, len(rows), snapshot.get("news", "")))
     if len({p.pid for p in players}) != len(players):
         raise ValueError("The squad contains a duplicate player")
-    if Counter(p.position for p in players) != Counter({"GKP": 2, "DEF": 5, "MID": 5, "FWD": 3}):
+    if validate_squad and Counter(p.position for p in players) != Counter({"GKP": 2, "DEF": 5, "MID": 5, "FWD": 3}):
         raise ValueError("Squad must contain 2 goalkeepers, 5 defenders, 5 midfielders and 3 forwards")
     return players
 
@@ -601,7 +608,16 @@ def build_report(args):
                                "autosub_probability": sub_counts[i] / args.iterations,
                                "availability": p.availability, "history_games": p.history_games,
                                "rates_per_90": p.rates})
+    # Pin the inputs in saved results so a report can reject a stale team snapshot.
+    try:
+        revision = subprocess.run(["git", "-C", str(args.data.parent), "rev-parse", "HEAD"],
+                                  capture_output=True, text=True, check=False)
+        data_revision = revision.stdout.strip() if revision.returncode == 0 else None
+    except FileNotFoundError:
+        data_revision = None  # Also allow a downloaded dataset without Git installed.
     return {"season": season, "gameweek": gw, "deadline": summary.get("deadline_time"),
+            "team_sha256": hashlib.sha256(args.team.read_bytes()).hexdigest(),
+            "data_revision": data_revision,
             "team_file": str(args.team.resolve()), "data_directory": str(args.data.resolve()),
             "training_gameweeks": sorted({r["_gw"] for rows in history.values() for r in rows}),
             "training_matches": len(matches), "iterations": args.iterations, "pilot_iterations": pilot_count,
