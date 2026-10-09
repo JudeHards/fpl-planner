@@ -1,0 +1,4 @@
+[submodule "FPL-Core-Insights"]
+	path = FPL-Core-Insights
+	url = https://github.com/olbauday/FPL-Core-Insights.git
+	branch = main
