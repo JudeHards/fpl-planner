@@ -1,12 +1,12 @@
 # FPL squad and transfer report
 
-2026-2027 • GW6–8 • Generated 09 October 2026, 12:56 IST • Deadline 10 October 2026, 11:00 IST
+2026-2027 • GW7–9 • Generated 15 October 2026, 16:49 IST • Deadline 17 October 2026, 11:00 IST
 
-**Current team · next GW: 53.1 pts** · **Simulated middle 80%: 38–69 pts** · **Best move · net horizon gain: +5.17 pts**
+**Current team · next GW: 52.6 pts** · **Simulated middle 80%: 37–69 pts** · **Best move · net horizon gain: +4.14 pts**
 
 ## Decision to consider
 
-The highest-ranked package in this search is **Palmer → Groß**. It adds an estimated **5.17 team points over GW6–8 after a 0-point hit**, leaving £3.8m in the bank under the assumptions below.
+The highest-ranked package in this search is **Szoboszlai → Groß**. It adds an estimated **4.14 team points over GW7–9 after a 0-point hit**, leaving £0.9m in the bank under the assumptions below.
 
 Treat this as a shortlist to check before the deadline. The ranking depends on provisional selling prices, local injury flags and a small sample of matches; it is not a calibrated forecast.
 
@@ -14,33 +14,33 @@ Budget assumed: **£0.0m**. Free transfers assumed: **1**. Listed squad prices a
 
 ## Current team and selection
 
-The Monte Carlo forecast for GW6 is **53.11 points**, including captaincy and automatic substitutions. Median 52; 10th–90th percentile 38–69. Captain **Haaland**, vice-captain **Mbeumo**.
+The Monte Carlo forecast for GW7 is **52.58 points**, including captaincy and automatic substitutions. Median 52; 10th–90th percentile 37–69. Captain **Haaland**, vice-captain **De Cuyper**.
 
-Starting XI: Raya, Calafiori, Ajer, De Cuyper, Thomas, Rogers, Lewis-Potter, Szoboszlai, Mbeumo, Emersonn, Haaland. Bench order (reserve goalkeeper separate in use): Palmer, João Pedro, Konsa, Scherpen.
+Starting XI: Raya, Calafiori, Ajer, De Cuyper, Thomas, Rogers, Palmer, Mbeumo, João Pedro, Emersonn, Haaland. Bench order (reserve goalkeeper separate in use): Lewis-Potter, Konsa, Szoboszlai, Scherpen.
 
-| Player | Pos | Selection | Assumed sale | GW6 MC xPts | GW6–8 screen xPts | Next GW minutes | Availability |
+| Player | Pos | Selection | Assumed sale | GW7 MC xPts | GW7–9 screen xPts | Next GW minutes | Availability |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Raya | GKP | XI | £6.0m | 4.83 | 14.24 | 90 | 100% |
-| Scherpen | GKP | Reserve GK | £4.5m | 2.34 | 6.59 | 63 | 100% |
-| Calafiori | DEF | XI | £5.7m | 4.35 | 12.67 | 84 | 100% |
-| Konsa | DEF | Bench 3 | £4.5m | 2.38 | 6.96 | 50 | 75% |
-| Ajer | DEF | XI | £4.5m | 4.07 | 11.70 | 90 | 100% |
-| De Cuyper | DEF | XI | £4.8m | 3.31 | 10.95 | 86 | 100% |
-| Thomas | DEF | XI | £4.0m | 4.88 | 13.73 | 88 | 100% |
-| Rogers | MID | XI | £7.7m | 4.22 | 12.40 | 88 | 100% |
-| Lewis-Potter | MID | XI | £5.5m | 3.64 | 10.61 | 79 | 100% |
-| Palmer | MID | Bench 1 | £9.7m | 2.92 | 8.65 | 67 | 75% |
-| Szoboszlai | MID | XI | £6.9m | 3.86 | 11.27 | 87 | 100% |
-| Mbeumo | MID | XI (VC) | £7.9m | 5.04 | 14.25 | 90 | 100% |
-| João Pedro | FWD | Bench 2 | £7.6m | 2.39 | 7.06 | 47 | 75% |
-| Emersonn | FWD | XI | £5.5m | 4.05 | 11.26 | 66 | 100% |
-| Haaland | FWD | XI (C) | £15.5m | 5.43 | 17.82 | 90 | 100% |
+| Raya | GKP | XI | £6.0m | 4.22 | 13.28 | 90 | 100% |
+| Scherpen | GKP | Reserve GK | £4.5m | 1.33 | 4.58 | 45 | 100% |
+| Calafiori | DEF | XI | £5.7m | 4.17 | 13.47 | 83 | 100% |
+| Konsa | DEF | Bench 2 | £4.5m | 3.01 | 9.69 | 74 | 100% |
+| Ajer | DEF | XI | £4.5m | 3.67 | 10.90 | 90 | 100% |
+| De Cuyper | DEF | XI (VC) | £4.8m | 4.86 | 12.77 | 81 | 100% |
+| Thomas | DEF | XI | £4.0m | 4.50 | 13.32 | 89 | 100% |
+| Rogers | MID | XI | £7.7m | 3.86 | 12.07 | 87 | 100% |
+| Lewis-Potter | MID | Bench 1 | £5.5m | 3.37 | 10.00 | 75 | 100% |
+| Palmer | MID | XI | £9.7m | 3.48 | 10.84 | 88 | 100% |
+| Szoboszlai | MID | Bench 3 | £6.9m | 1.95 | 5.88 | 47 | 75% |
+| Mbeumo | MID | XI | £7.9m | 4.46 | 13.65 | 90 | 100% |
+| João Pedro | FWD | XI | £7.6m | 3.51 | 11.03 | 65 | 100% |
+| Emersonn | FWD | XI | £5.5m | 3.59 | 10.93 | 67 | 100% |
+| Haaland | FWD | XI (C) | £15.5m | 5.75 | 16.82 | 87 | 100% |
 
 Player xPts above are before captain doubling and bench selection. Availability is the local fitness flag; expected minutes also reflect recent starts and nonappearances. The multiweek screen is an analytic approximation, so its values differ slightly from the simulation.
 
-| Scenario | GW6 | GW7 | GW8 | Total before hits |
+| Scenario | GW7 | GW8 | GW9 | Total before hits |
 | --- | --- | --- | --- | --- |
-| Hold — comparison baseline | 52.92 | 52.60 | 53.20 | 158.71 |
+| Hold — comparison baseline | 52.76 | 53.37 | 52.03 | 158.16 |
 
 ## Possible transfers
 
@@ -50,36 +50,36 @@ Every gain below compares the updated squad with the **same analytic holding bas
 
 | Out | In | Net spend | Bank left | Gross gain | Hit | Net gain |
 | --- | --- | --- | --- | --- | --- | --- |
-| Palmer | Groß | −£3.8m | £3.8m | +5.17 | 0 | +5.17 |
-| Szoboszlai | Groß | −£1.0m | £1.0m | +3.98 | 0 | +3.98 |
-| Palmer | Gibbs-White | −£1.7m | £1.7m | +3.87 | 0 | +3.87 |
-| Palmer | Tavernier | −£3.6m | £3.6m | +3.76 | 0 | +3.76 |
-| Konsa | Schuster | £0.0m | £0.0m | +3.74 | 0 | +3.74 |
-| Palmer | Schade | −£3.5m | £3.5m | +3.34 | 0 | +3.34 |
+| Szoboszlai | Groß | −£0.9m | £0.9m | +4.14 | 0 | +4.14 |
+| Palmer | Groß | −£3.7m | £3.7m | +3.81 | 0 | +3.81 |
+| Szoboszlai | Dewsbury-Hall | −£0.3m | £0.3m | +3.00 | 0 | +3.00 |
+| Szoboszlai | McGinn | −£1.5m | £1.5m | +2.77 | 0 | +2.77 |
+| Lewis-Potter | McGinn | −£0.1m | £0.1m | +2.77 | 0 | +2.77 |
+| Palmer | Dewsbury-Hall | −£3.1m | £3.1m | +2.68 | 0 | +2.68 |
 
 ### Two-player packages
 
 | Out | In | Net spend | Bank left | Gross gain | Hit | Net gain |
 | --- | --- | --- | --- | --- | --- | --- |
-| Palmer, João Pedro | Groß, Isak | −£2.3m | £2.3m | +8.71 | 4 | +4.71 |
-| Lewis-Potter, Palmer | Groß, Gibbs-White | −£1.3m | £1.3m | +8.51 | 4 | +4.51 |
-| Lewis-Potter, Palmer | Groß, Tavernier | −£3.2m | £3.2m | +8.40 | 4 | +4.40 |
-| Konsa, Palmer | Tarkowski, Groß | −£2.1m | £2.1m | +8.18 | 4 | +4.18 |
-| Konsa, Palmer | Hall, Groß | −£3.0m | £3.0m | +8.08 | 4 | +4.08 |
-| Palmer, Emersonn | Groß, Isak | −£0.2m | £0.2m | +7.93 | 4 | +3.93 |
+| Ajer, Palmer | Tarkowski, Groß | −£2.0m | £2.0m | +6.64 | 4 | +2.64 |
+| Szoboszlai, Emersonn | Groß, Barry | −£0.7m | £0.7m | +6.42 | 4 | +2.42 |
+| Konsa, Palmer | Tarkowski, Groß | −£2.0m | £2.0m | +6.20 | 4 | +2.20 |
+| Palmer, Emersonn | Groß, Barry | −£3.5m | £3.5m | +6.17 | 4 | +2.17 |
+| Palmer, Szoboszlai | Groß, Dewsbury-Hall | −£4.0m | £4.0m | +5.99 | 4 | +1.99 |
+| Lewis-Potter, Palmer | Groß, Dewsbury-Hall | −£2.6m | £2.6m | +5.99 | 4 | +1.99 |
 
 A negative net spend releases money. Only positive net gains are shown; holding is always available. A saved free transfer has future option value that the model does not price.
 
 ### Leading package by gameweek
 
-| Scenario | GW6 | GW7 | GW8 | After-hit total |
+| Scenario | GW7 | GW8 | GW9 | After-hit total |
 | --- | --- | --- | --- | --- |
-| Hold | 52.92 | 52.60 | 53.20 | 158.71 |
-| Leading package (GW values before hit) | 54.61 | 54.67 | 54.60 | 163.88 |
+| Hold | 52.76 | 53.37 | 52.03 | 158.16 |
+| Leading package (GW values before hit) | 54.78 | 54.28 | 53.24 | 162.30 |
 
-After this package in GW6: captain **Haaland**, vice **Mbeumo**. XI: Raya, Thomas, Calafiori, Ajer, Mbeumo, Groß, Rogers, Szoboszlai, Lewis-Potter, Haaland, Emersonn. Bench: De Cuyper, João Pedro, Konsa, Scherpen.
+After this package in GW7: captain **Haaland**, vice **Groß**. XI: Raya, De Cuyper, Thomas, Calafiori, Ajer, Groß, Mbeumo, Rogers, Haaland, Emersonn, João Pedro. Bench: Palmer, Lewis-Potter, Konsa, Scherpen.
 
-Reoptimising the XI and captain over 3 gameweeks gains 5.17 points before a 0-point transfer hit.
+Reoptimising the XI and captain over 3 gameweeks gains 4.14 points before a 0-point transfer hit.
 
 ## Players to watch by position
 
@@ -87,59 +87,56 @@ These are the highest projected unowned players, regardless of whether you can a
 
 ### Goalkeepers
 
-| Player | Club | Buy | GW6–8 xPts | Availability | Fixtures |
+| Player | Club | Buy | GW7–9 xPts | Availability | Fixtures |
 | --- | --- | --- | --- | --- | --- |
-| Tzolakis | Hull City | £4.7m | 13.03 | 100% | GW6: Everton (H); GW7: Fulham (A); GW8: Brentford (H) |
-| Trafford | Leeds | £5.0m | 11.58 | 100% | GW6: Arsenal (A); GW7: Man Utd (H); GW8: Sunderland (A) |
-| Kelleher | Brentford | £5.0m | 11.00 | 100% | GW6: Aston Villa (A); GW7: Liverpool (H); GW8: Hull City (A) |
-| A.Becker | Liverpool | £5.5m | 10.99 | 100% | GW6: Man City (H); GW7: Brentford (A); GW8: Brighton (H) |
-| Lammens | Man Utd | £4.9m | 10.97 | 100% | GW6: Spurs (H); GW7: Leeds (A); GW8: Bournemouth (H) |
+| Tzolakis | Hull City | £4.7m | 12.04 | 100% | GW7: Fulham (A); GW8: Brentford (H); GW9: Ipswich Town (H) |
+| Trafford | Leeds | £5.0m | 11.21 | 100% | GW7: Man Utd (H); GW8: Sunderland (A); GW9: Bournemouth (A) |
+| Leno | Fulham | £4.5m | 10.76 | 100% | GW7: Hull City (H); GW8: Coventry City (A); GW9: Aston Villa (A) |
+| Kelleher | Brentford | £5.0m | 10.48 | 100% | GW7: Liverpool (H); GW8: Hull City (A); GW9: Nott'm Forest (H) |
+| Donnarumma | Man City | £5.5m | 10.39 | 100% | GW7: Ipswich Town (H); GW8: Aston Villa (A); GW9: Brighton (H) |
 
 ### Defenders
 
-| Player | Club | Buy | GW6–8 xPts | Availability | Fixtures |
+| Player | Club | Buy | GW7–9 xPts | Availability | Fixtures |
 | --- | --- | --- | --- | --- | --- |
-| Tarkowski | Everton | £6.2m | 13.63 | 100% | GW6: Hull City (A); GW7: Chelsea (H); GW8: Arsenal (A) |
-| Hall | Newcastle | £5.3m | 13.52 | 100% | GW6: Coventry City (A); GW7: Aston Villa (H); GW8: Crystal Palace (A) |
-| Gabriel | Arsenal | £8.0m | 13.09 | 100% | GW6: Leeds (H); GW7: Nott'm Forest (A); GW8: Everton (H) |
-| Bogle | Leeds | £4.6m | 12.57 | 100% | GW6: Arsenal (A); GW7: Man Utd (H); GW8: Sunderland (A) |
-| Dasilva | Coventry City | £4.0m | 12.48 | 100% | GW6: Newcastle (H); GW7: Spurs (A); GW8: Fulham (H) |
+| Tarkowski | Everton | £6.2m | 13.73 | 100% | GW7: Chelsea (H); GW8: Arsenal (A); GW9: Newcastle (A) |
+| Van Hecke | Spurs | £4.9m | 12.82 | 100% | GW7: Coventry City (H); GW8: Chelsea (A); GW9: Crystal Palace (H) |
+| Silva | Bournemouth | £5.0m | 12.81 | 100% | GW7: Sunderland (H); GW8: Man Utd (A); GW9: Leeds (H) |
+| Hall | Newcastle | £5.3m | 12.17 | 100% | GW7: Aston Villa (H); GW8: Crystal Palace (A); GW9: Everton (H) |
+| Vuskovic | Brighton | £5.1m | 12.02 | 100% | GW7: Crystal Palace (H); GW8: Liverpool (A); GW9: Man City (A) |
 
 ### Midfielders
 
-| Player | Club | Buy | GW6–8 xPts | Availability | Fixtures |
+| Player | Club | Buy | GW7–9 xPts | Availability | Fixtures |
 | --- | --- | --- | --- | --- | --- |
-| Saka | Arsenal | £9.6m | 15.37 | 100% | GW6: Leeds (H); GW7: Nott'm Forest (A); GW8: Everton (H) |
-| Groß | Brighton | £5.9m | 15.25 | 100% | GW6: Sunderland (A); GW7: Crystal Palace (H); GW8: Liverpool (A) |
-| B.Fernandes | Man Utd | £11.9m | 14.13 | 100% | GW6: Spurs (H); GW7: Leeds (A); GW8: Bournemouth (H) |
-| Gibbs-White | Nott'm Forest | £8.0m | 13.95 | 100% | GW6: Crystal Palace (A); GW7: Arsenal (H); GW8: Ipswich Town (A) |
-| Tavernier | Bournemouth | £6.1m | 13.84 | 100% | GW6: Chelsea (A); GW7: Sunderland (H); GW8: Man Utd (A) |
+| Groß | Brighton | £6.0m | 14.65 | 100% | GW7: Crystal Palace (H); GW8: Liverpool (A); GW9: Man City (A) |
+| Saka | Arsenal | £9.6m | 14.44 | 100% | GW7: Nott'm Forest (A); GW8: Everton (H); GW9: Liverpool (A) |
+| Dewsbury-Hall | Everton | £6.6m | 13.52 | 100% | GW7: Chelsea (H); GW8: Arsenal (A); GW9: Newcastle (A) |
+| McGinn | Aston Villa | £5.4m | 13.29 | 100% | GW7: Newcastle (A); GW8: Man City (H); GW9: Fulham (H) |
+| Gibbs-White | Nott'm Forest | £8.0m | 13.04 | 100% | GW7: Arsenal (H); GW8: Ipswich Town (A); GW9: Brentford (A) |
 
 ### Forwards
 
-| Player | Club | Buy | GW6–8 xPts | Availability | Fixtures |
+| Player | Club | Buy | GW7–9 xPts | Availability | Fixtures |
 | --- | --- | --- | --- | --- | --- |
-| Barry | Everton | £5.7m | 12.69 | 100% | GW6: Hull City (A); GW7: Chelsea (H); GW8: Arsenal (A) |
-| Calvert-Lewin | Leeds | £6.0m | 12.41 | 100% | GW6: Arsenal (A); GW7: Man Utd (H); GW8: Sunderland (A) |
-| Gonzalo | Fulham | £6.0m | 12.27 | 100% | GW6: Ipswich Town (A); GW7: Hull City (H); GW8: Coventry City (A) |
-| Isak | Liverpool | £9.1m | 11.50 | 75% | GW6: Man City (H); GW7: Brentford (A); GW8: Brighton (H) |
-| Wissa | Newcastle | £6.2m | 11.28 | 100% | GW6: Coventry City (A); GW7: Aston Villa (H); GW8: Crystal Palace (A) |
+| Barry | Everton | £5.7m | 13.29 | 100% | GW7: Chelsea (H); GW8: Arsenal (A); GW9: Newcastle (A) |
+| Gonzalo | Fulham | £6.1m | 12.71 | 100% | GW7: Hull City (H); GW8: Coventry City (A); GW9: Aston Villa (A) |
+| Calvert-Lewin | Leeds | £6.0m | 11.82 | 100% | GW7: Man Utd (H); GW8: Sunderland (A); GW9: Bournemouth (A) |
+| Evanilson | Bournemouth | £6.0m | 11.47 | 100% | GW7: Sunderland (H); GW8: Man Utd (A); GW9: Leeds (H) |
+| Wissa | Newcastle | £6.3m | 11.00 | 100% | GW7: Aston Villa (H); GW8: Crystal Palace (A); GW9: Everton (H) |
 
 ## Availability and checks before acting
 
-- Konsa: 75% availability in local GW5 snapshot. Unspecified injury - 75% chance of playing
-- Palmer: 75% availability in local GW5 snapshot. Muscular injury - 75% chance of playing
-- João Pedro: 75% availability in local GW5 snapshot. Knee injury - 75% chance of playing
-- No live data was fetched. All projections use local pre-GW6 evidence and availability held fixed throughout the horizon.
-- Suggested incoming player Isak (Liverpool): 75% availability. Thigh injury - 75% chance of playing
+- Szoboszlai: 75% availability in local GW6 snapshot. Hamstring injury - 75% chance of playing
+- No live data was fetched. All projections use local pre-GW7 evidence and availability held fixed throughout the horizon.
 
 Before making a move, confirm your bank balance, free transfers, selling prices and the latest team news in FPL. No transfer has been submitted by these scripts.
 
 ## Method and limitations
 
-Training uses 50 completed Premier League matches from gameweeks 1, 2, 3, 4, 5. The current-team result uses 20,000 simulations with seed 42; its Monte Carlo standard error is 0.09 points. This measures simulation noise only, not model accuracy.
+Training uses 60 completed Premier League matches from gameweeks 1, 2, 3, 4, 5, 6. The current-team result uses 20,000 simulations with seed 42; its Monte Carlo standard error is 0.09 points. This measures simulation noise only, not model accuracy.
 
-Transfer search: 1,336 single moves and 5,004 two-player packages evaluated. Two-player search uses a bounded shortlist (8 candidates per outgoing player); the leading package is the best found in this search, not a proof of the global optimum.
+Transfer search: 1,391 single moves and 5,028 two-player packages evaluated. Two-player search uses a bounded shortlist (8 candidates per outgoing player); the leading package is the best found in this search, not a proof of the global optimum.
 
 ### Transfer-screen assumptions
 
@@ -172,7 +169,7 @@ The Monte Carlo model shares goal events within a match; the faster screening mo
 
 ## Sources and reproduction
 
-Data: [FPL-Core-Insights](https://github.com/olbauday/FPL-Core-Insights), pinned as a Git submodule. Data revision: `bc54bccf0d63b0f7f8bbd476807254ed0eb10ed3`. Team input SHA-256: `8c3c8fdad127db08535748715d93b80fd0695baf2184df6ebf934d844b08614c`.
+Data: [FPL-Core-Insights](https://github.com/olbauday/FPL-Core-Insights), pinned as a Git submodule. Data revision: `c7e7ab54b43a29d374c568e0e7f59c94c76a2755`. Team input SHA-256: `8284b4e27056b44373d10ff8b3cf301eb4a310a903e18407badfda1f6b8fe1c7`.
 
 Rules: [official scoring guide](https://www.premierleague.com/en/news/2174909) and [official transfer guide](https://www.premierleague.com/en/news/2174907), checked 9 October 2026. Four points are deducted for each transfer beyond the free allowance; selling proceeds can differ from the current buying price.
 
