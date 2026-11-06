@@ -5,6 +5,8 @@
     python3 build_report.py --bank 1.5 --free-transfers 2
     python3 build_report.py --from-json
 
+Bank and free transfers come from current-team.md unless the flags are given.
+
 The default recomputes both analyses, avoiding a report assembled from stale JSON.
 HTML is self-contained and printable; Markdown is the same report for GitHub.
 Neither this script nor its analysis subprocesses makes transfers or calls FPL.
@@ -39,6 +41,24 @@ def text_block(text):
 
 def table(headers, rows):
     return {"kind": "table", "headers": headers, "rows": rows}
+
+
+def pitch_block(sim, squad_lookup, gw):
+    by_name = {p["name"]: p for p in sim["players"]}
+
+    def card(name):
+        p, t = by_name[name], squad_lookup[name]
+        fixture = ", ".join(next((f["opponents"] for f in t.get("fixtures", []) if f["gameweek"] == gw), [])) or "Blank"
+        return {"name": name, "club": p["club"], "pos": p["position"], "fixture": fixture,
+                "xpts": p["expected_points"], "avail": p["availability"],
+                "c": name == sim["captain"], "vc": name == sim["vice_captain"]}
+
+    xi = [card(n) for n in sim["starting_xi"]]
+    rows = [[c for c in xi if c["pos"] == pos] for pos in ("GKP", "DEF", "MID", "FWD")]
+    bench_names = list(sim["bench_order"])
+    gk = [p["name"] for p in sim["players"] if p["position"] == "GKP" and p["name"] not in sim["starting_xi"]]
+    bench = [card(n) for n in gk + [n for n in bench_names if n not in gk]]
+    return {"kind": "pitch", "rows": rows, "bench": bench}
 
 
 def section(title):
@@ -107,6 +127,7 @@ def make_document(sim, transfers, created):
                              f"Median {sim['median']:.0f}; 10th–90th percentile {sim['p10']:.0f}–{sim['p90']:.0f}. "
                              f"Captain **{sim['captain']}**, vice-captain **{sim['vice_captain']}**."))
     blocks.append(text_block("Starting XI: " + ", ".join(sim["starting_xi"]) + ". Bench order (reserve goalkeeper separate in use): " + ", ".join(sim["bench_order"]) + "."))
+    blocks.append(pitch_block(sim, squad_lookup, gw))
     rows = []
     for p in sim["players"]:
         target = squad_lookup[p["name"]]
@@ -124,12 +145,14 @@ def make_document(sim, transfers, created):
     blocks.append(text_block("Every gain below compares the updated squad with the **same analytic holding baseline**, including its best legal XI, captaincy and bench cover. "
                              "It is not simply incoming-player points minus outgoing-player points. Costs and club limits apply to the complete package."))
     displayed_incoming = set()
-    for count, label in ((1, "One-player moves"), (2, "Two-player packages")):
-        by_size = transfers.get("single_moves" if count == 1 else "pair_moves", moves)
-        chosen = [m for m in by_size if len(m["out"]) == count][:6]
+    for count, key, label in ((1, "single_moves", "Best one-transfer moves"), (2, "pair_moves", "Best two-transfer packages"),
+                              (3, "triple_moves", "Best three-transfer packages")):
+        if count > transfers["search"].get("max_transfers", 2):
+            continue
+        chosen = [m for m in transfers.get(key, moves) if len(m["out"]) == count][:6]
         blocks.append({"kind": "subheading", "text": label})
         if not chosen:
-            blocks.append(text_block("No positive-net package of this size appears in the returned shortlist."))
+            blocks.append(text_block("No package of this size has a positive net gain."))
             continue
         rows = []
         for m in chosen:
@@ -177,9 +200,11 @@ def make_document(sim, transfers, created):
                              f"with seed {sim['seed']}; its Monte Carlo standard error is {sim['monte_carlo_standard_error']:.2f} points. "
                              "This measures simulation noise only, not model accuracy."))
     search = transfers["search"]
-    blocks.append(text_block(f"Transfer search: {search['single_moves_evaluated']:,} single moves and {search['pair_moves_evaluated']:,} two-player packages evaluated. "
-                             f"Two-player search uses a bounded shortlist ({search['shortlist_per_outgoing']} candidates per outgoing player); "
-                             "the leading package is the best found in this search, not a proof of the global optimum."))
+    sizes = [(k, label) for k, label in ((1, "single"), (2, "pair"), (3, "triple")) if k <= search.get("max_transfers", 2)]
+    blocks.append(text_block("Transfer search: " + ", ".join(f"{search.get(f'{label}_moves_evaluated', 0):,} {k}-transfer" for k, label in sizes)
+                             + " packages evaluated in full. Every single swap is tested. Larger packages are searched by branch and bound: "
+                             "players beaten on price and every week's projection are skipped, and branches whose optimistic bound cannot reach the "
+                             "top results are cut. The bound is not strict for bench cover, so very close alternatives can be missed."))
     blocks.append({"kind": "subheading", "text": "Transfer-screen assumptions"})
     blocks.append({"kind": "list", "items": transfers.get("assumptions", [])})
     blocks.append({"kind": "subheading", "text": "Current-team simulation assumptions"})
@@ -194,7 +219,7 @@ def make_document(sim, transfers, created):
     blocks.append(text_block("Rules: [official scoring guide](https://www.premierleague.com/en/news/2174909) and "
                              "[official transfer guide](https://www.premierleague.com/en/news/2174907), checked 9 October 2026. "
                              "Four points are deducted for each transfer beyond the free allowance; selling proceeds can differ from the current buying price."))
-    blocks.append({"kind": "code", "text": "python3 build_report.py\n# Change assumptions when your actual values are known:\npython3 build_report.py --bank 1.5 --free-transfers 2\n# Pull upstream data, then regenerate:\ngit submodule update --remote --merge FPL-Core-Insights\npython3 build_report.py"})
+    blocks.append({"kind": "code", "text": "python3 build_report.py\n# Bank and free transfers are read from current-team.md; override with:\npython3 build_report.py --bank 1.5 --free-transfers 2\n# Pull upstream data, then regenerate:\ngit submodule update --remote --merge FPL-Core-Insights\npython3 build_report.py"})
     return {"title": "FPL squad and transfer report", "blocks": blocks}
 
 
@@ -233,6 +258,24 @@ def inline(value):
     return re.sub(r"\[([^\]]+)\]\((https://[^\s)]+)\)", r'<a href="\2">\1</a>', value)
 
 
+CLUB_CODES = {"Man City": "MCI", "Man Utd": "MUN", "Nott'm Forest": "NFO", "Spurs": "TOT", "Ipswich Town": "IPS",
+              "Coventry City": "COV", "Hull City": "HUL", "Crystal Palace": "CRY", "Aston Villa": "AVL", "Newcastle": "NEW",
+              "Sunderland": "SUN", "Bournemouth": "BOU", "Brentford": "BRE", "Brighton": "BHA", "Liverpool": "LIV"}
+
+
+def render_pitch(b):
+    def card(c, bench=False):
+        badge = '<i class="cap">C</i>' if c["c"] else '<i class="cap vc">V</i>' if c["vc"] else ""
+        flag = '<i class="flag">!</i>' if c["avail"] < 0.75 else ""
+        slug = re.sub(r"[^a-z0-9]+", "-", c["club"].lower()).strip("-")
+        return (f'<div class="pl">{badge}{flag}<div class="kit k-{slug}"><span>{html.escape(CLUB_CODES.get(c["club"], c["club"][:3].upper()))}</span></div>'
+                f'<div class="nm">{html.escape(c["name"])}</div><div class="fx">{html.escape(c["fixture"])}</div>'
+                f'<div class="xp">{c["xpts"]:.1f} xPts</div></div>')
+    rows = "".join('<div class="prow">' + "".join(card(c) for c in row) + "</div>" for row in b["rows"])
+    bench = "".join(f'<div class="bslot"><b>{"GKP" if i == 0 else i}</b>{card(c, True)}</div>' for i, c in enumerate(b["bench"]))
+    return f'<div class="pitch"><div class="grass">{rows}</div><div class="bench"><h4>Substitutes</h4><div class="brow">{bench}</div></div></div>'
+
+
 def render_html(document):
     content = []
     for b in document["blocks"]:
@@ -248,6 +291,8 @@ def render_html(document):
             content.append("<pre><code>" + html.escape(b["text"]) + "</code></pre>")
         elif kind == "metrics":
             content.append('<div class="metrics">' + "".join(f'<div><span>{inline(label)}</span><strong>{inline(value)}</strong></div>' for label, value in b["items"]) + "</div>")
+        elif kind == "pitch":
+            content.append(render_pitch(b))
         elif kind == "table":
             content.append('<div class="table-wrap"><table><thead><tr>' + "".join(f"<th>{inline(c)}</th>" for c in b["headers"]) + "</tr></thead><tbody>" +
                            "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in row) + "</tr>" for row in b["rows"]) + "</tbody></table></div>")
@@ -262,6 +307,25 @@ main{max-width:1180px;margin:36px auto;padding:52px 58px;background:var(--paper)
 h2{font-size:25px;line-height:1.3;margin:40px 0 15px;padding-top:22px;border-top:1px solid var(--line);letter-spacing:-.025em}h3{font-size:18px;margin:26px 0 10px}p{margin:12px 0}a{color:var(--accent);text-underline-offset:3px}
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:28px 0}.metrics>div{background:var(--tint);border-radius:7px;padding:20px}.metrics span{display:block;font-size:12px;color:var(--muted);font-weight:600}.metrics strong{display:block;font-size:31px;line-height:1.25;margin-top:8px;letter-spacing:-.035em}
 .table-wrap{width:100%;overflow:auto;margin:18px 0}table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.45}th{background:var(--ink);color:#fff;text-align:left;padding:11px 10px;font-weight:650}td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f4f7f1}td:first-child{font-weight:600}li{margin:8px 0}code{font-size:.85em;overflow-wrap:anywhere}pre{background:var(--tint);padding:20px;border-radius:5px;overflow:auto;line-height:1.55}footer{margin-top:36px;color:var(--muted);font-size:12px}
+.pitch{margin:22px auto;max-width:760px;border-radius:10px;overflow:hidden;background:#37003c;box-shadow:0 4px 18px #0003}
+.grass{padding:26px 8px 12px;background:repeating-linear-gradient(180deg,#2fb35e 0 56px,#29a455 56px 112px);position:relative}
+.grass:before{content:"";position:absolute;left:8%;right:8%;top:50%;height:2px;background:#ffffff55}
+.prow{display:flex;justify-content:space-around;margin:0 0 22px;position:relative}
+.pl{position:relative;width:96px;text-align:center;line-height:1.2}
+.kit{width:46px;height:46px;margin:0 auto 4px;border-radius:9px 9px 14px 14px;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;box-shadow:inset 0 -6px 0 #0002}
+.kit span{text-shadow:0 1px 2px #0007}
+.nm{background:#fff;color:#37003c;font-size:12px;font-weight:700;border-radius:4px 4px 0 0;padding:3px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fx{background:#37003c;color:#fff;font-size:11px;padding:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.xp{background:#00ff87;color:#37003c;font-size:11px;font-weight:700;border-radius:0 0 4px 4px;padding:1px}
+.cap{position:absolute;top:-4px;right:6px;width:19px;height:19px;border-radius:50%;background:#37003c;color:#fff;font:700 11px/19px system-ui;text-align:center;border:1px solid #fff;z-index:2}.cap.vc{background:#fff;color:#37003c}
+.flag{position:absolute;top:-4px;left:6px;width:19px;height:19px;border-radius:50%;background:#e90052;color:#fff;font:700 12px/19px system-ui;text-align:center;z-index:2}
+.bench{background:#37003c;padding:10px 8px 16px}.bench h4{margin:0 0 10px;color:#fff;font-size:13px;text-align:center}.brow{display:flex;justify-content:space-around}
+.bslot{text-align:center}.bslot b{display:block;color:#00ff87;font-size:11px;margin-bottom:4px}
+.k-arsenal{background:#ef0107}.k-brentford{background:repeating-linear-gradient(90deg,#e30613 0 8px,#fff 8px 16px)}.k-brighton{background:repeating-linear-gradient(90deg,#0057b8 0 8px,#fff 8px 16px)}
+.k-bournemouth{background:repeating-linear-gradient(90deg,#d71920 0 8px,#111 8px 16px)}.k-chelsea{background:#034694}.k-man-city{background:#6cabdd}.k-man-utd{background:#da291c}
+.k-ipswich-town{background:#0044aa}.k-coventry-city{background:#59c3f0}
+@media(max-width:760px){.pl{width:62px}.nm{font-size:10px}.fx,.xp{font-size:9px}.kit{width:36px;height:36px}}
+@media print{.pitch{break-inside:avoid;max-width:560px}}
 @media(max-width:760px){main{margin:0;padding:30px 20px;box-shadow:none}h1{font-size:32px}.metrics{grid-template-columns:1fr}.metrics>div{padding:15px}.metrics strong{font-size:27px}table{min-width:620px}}
 @media print{@page{size:A4 landscape;margin:13mm}body{background:white;font-size:10pt}main{padding:0;margin:0;max-width:none;box-shadow:none;border:0}h1{font-size:25pt}h2{font-size:17pt;break-after:avoid}h3{break-after:avoid}.metrics{margin:14px 0}.metrics strong{font-size:23pt}.table-wrap{overflow:visible}table{font-size:8pt;min-width:0}thead{display:table-header-group}tr{break-inside:avoid}th,td{padding:6px}pre{white-space:pre-wrap}a{color:inherit}footer{margin-top:20px}}
 </style></head><body><main><div class="eyebrow">FPL planner · squad intelligence</div><h1>''' + html.escape(document["title"]) + "</h1>" + "\n".join(content) + '<footer>Generated locally from versioned inputs. No account changes or transfers have been made.</footer></main></body></html>\n'
@@ -281,13 +345,13 @@ def main(argv=None):
     parser.add_argument("--season")
     parser.add_argument("--gameweek", type=int)
     parser.add_argument("--horizon", type=int, default=3)
-    parser.add_argument("--bank", type=float, default=0)
-    parser.add_argument("--free-transfers", type=int, default=1)
+    parser.add_argument("--bank", type=float, help="Default: the team file's Bank line")
+    parser.add_argument("--free-transfers", type=int, help="Default: the team file's Free transfers line")
     parser.add_argument("--selling-prices", type=Path, help="JSON mapping player names/IDs to actual sale values")
     parser.add_argument("--iterations", type=int, default=20000)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--lookback", type=int, default=8)
-    parser.add_argument("--top", type=int, default=30, help="Number of transfer packages retained")
+    parser.add_argument("--top", type=int, default=10, help="Transfer packages retained for each transfer count")
     parser.add_argument("--from-json", action="store_true", help="Use existing matching analysis JSONs")
     parser.add_argument("--simulation-json", type=Path, default=ROOT / "simulation-results.json")
     parser.add_argument("--transfers-json", type=Path, default=ROOT / "transfer-results.json")
@@ -303,8 +367,11 @@ def main(argv=None):
             run_analysis([sys.executable, str(ROOT / "simulate_points.py")] + common +
                          ["--iterations", str(args.iterations), "--seed", str(args.seed), "--json-output", str(args.simulation_json)])
             command = [sys.executable, str(ROOT / "find_transfers.py")] + common + [
-                "--horizon", str(args.horizon), "--bank", str(args.bank), "--free-transfers", str(args.free_transfers),
-                "--top", str(args.top), "--json-output", str(args.transfers_json)]
+                "--horizon", str(args.horizon), "--top", str(args.top), "--json-output", str(args.transfers_json)]
+            if args.bank is not None:
+                command += ["--bank", str(args.bank)]
+            if args.free_transfers is not None:
+                command += ["--free-transfers", str(args.free_transfers)]
             if args.selling_prices:
                 command += ["--selling-prices", str(args.selling_prices)]
             run_analysis(command)

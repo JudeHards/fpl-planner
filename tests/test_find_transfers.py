@@ -141,14 +141,59 @@ class TransferRulesTests(unittest.TestCase):
     def test_search_keeps_funding_pair_and_hides_negative_gains(self):
         dear = candidate("dear", "MID", 6, 8)
         cheap = candidate("cheap", "DEF", 4, 3)
-        moves, counts, singles, pairs = transfer.search_moves(self.owned, [dear, cheap], self.sales, 0, 1,
-                                                             self.baseline, 6, 1, top=100)
-        self.assertTrue(any(set(m["in"]) == {"dear", "cheap"} for m in pairs))
+        moves, counts, by_size = transfer.search_moves(self.owned, [dear, cheap], self.sales, 0, 1,
+                                                      self.baseline, 6, 1, top=100)
+        self.assertTrue(any(set(m["in"]) == {"dear", "cheap"} for m in by_size[2]))
         self.assertTrue(all(m["net_gain"] > 0 for m in moves))
         self.assertGreater(counts["pair_moves_evaluated"], 0)
         terrible = candidate("bad", "MID", 5, -10)
-        moves, _, _, _ = transfer.search_moves(self.owned, [terrible], self.sales, 0, 0, self.baseline, 6, 1)
+        moves, _, _ = transfer.search_moves(self.owned, [terrible], self.sales, 0, 0, self.baseline, 6, 1)
         self.assertEqual(moves, [])
+
+    def test_three_transfer_search_matches_brute_force(self):
+        # Two dear upgrades need a third, cheaper sale to fund them.
+        pool = [candidate("star", "MID", 7, 9), candidate("ace", "FWD", 7, 8, club="Away FC"),
+                candidate("cheap", "DEF", 3.5, 2.5), candidate("mid", "MID", 5.5, 4, club="Other FC"),
+                candidate("dud", "DEF", 4, 1, club="Other FC")]
+        _, _, by_size = transfer.search_moves(self.owned, pool, self.sales, 0, 3, self.baseline, 6, 1, top=5)
+        brute = []
+        for k in (1, 2, 3):
+            for outgoing in itertools.combinations(self.owned, k):
+                for incoming in itertools.permutations(pool, k):
+                    move = transfer.evaluate_move(self.owned, list(outgoing), list(incoming), self.sales, 0, 3, self.baseline, 6, 1)
+                    if move and move["net_gain"] > 1e-9:
+                        brute.append(move)
+        for k in (1, 2, 3):
+            expected = sorted({round(m["net_gain"], 9) for m in brute if len(m["in"]) == k}, reverse=True)[:1]
+            self.assertEqual([round(m["net_gain"], 9) for m in by_size[k][:1]], expected)
+        # The £7.0m star is unaffordable as a single or pair; only a third sale funds it.
+        self.assertIn("star", by_size[3][0]["in"])
+        self.assertFalse(any("star" in m["in"] for k in (1, 2) for m in by_size[k]))
+
+    def test_dominated_players_are_dropped_unless_club_limits_could_block(self):
+        better = candidate("better", "DEF", 4, 5, club="A")
+        worse = candidate("worse", "DEF", 5, 4, club="A")
+        # A same-club dominator can never be blocked by the club limit.
+        self.assertEqual(transfer.undominated([better, worse], 1), [better])
+        # But a second incoming player could take it, so keep the dearer one too.
+        self.assertEqual(transfer.undominated([better, worse], 2), [better, worse])
+        elsewhere = candidate("elsewhere", "DEF", 5, 4, club="B")
+        # Club A could be full, so one dominator from it is not enough.
+        self.assertEqual(transfer.undominated([better, elsewhere], 1), [better, elsewhere])
+        rivals = [candidate(f"r{i}", "DEF", 4, 5, club=f"R{i}") for i in range(5)]
+        # At most four clubs can be full: a fifth club's dominator always remains.
+        self.assertNotIn(elsewhere, transfer.undominated(rivals + [elsewhere], 1))
+        twins = [candidate("a", "DEF", 4, 5), candidate("b", "DEF", 4, 5)]
+        self.assertEqual([p["pid"] for p in transfer.undominated(twins, 1)], ["a"])
+
+    def test_team_file_supplies_bank_and_free_transfers(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "team.md"
+            path.write_text("Gameweek: 8  \nBank: £0.7m  \nFree transfers: 3  \n")
+            self.assertEqual(transfer.team_settings(path), {"bank": 0.7, "free_transfers": 3})
+            path.write_text("Free transfers: three\n")
+            with self.assertRaises(ValueError):
+                transfer.team_settings(path)
 
     def test_selling_price_override_affects_budget_and_unknown_keys_fail(self):
         rows = [{"Price": "£5.0m"} for p in self.owned]

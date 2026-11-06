@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Rank incoming FPL players and affordable one/two-transfer plans.
+"""Rank incoming FPL players and the best affordable one-, two- and three-transfer plans.
 
 Run: python3 find_transfers.py --json-output transfer-results.json
      python3 find_transfers.py --bank 0.5 --free-transfers 2 --horizon 3
+
+Bank and free transfers default to the "Bank:" and "Free transfers:" lines in
+the team file; the flags override them.
      python3 find_transfers.py --selling-prices selling-prices.json
 
 Only the standard library and the checked-out FPL-Core-Insights CSVs are used.
@@ -14,6 +17,7 @@ Read the comments and emitted assumptions before acting on a small point gain.
 from __future__ import annotations
 
 import argparse
+import bisect
 import hashlib
 import itertools
 import json
@@ -243,6 +247,23 @@ def selling_prices(team_rows, owned, path):
     return {pid: money_units(price) for pid, price in prices.items()}
 
 
+def team_settings(path):
+    """Read "Bank: £0.7m" and "Free transfers: 3" lines from the team Markdown."""
+    settings = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        match = re.match(r"\s*(Bank|Free transfers)\s*:\s*(.+?)\s*$", line, flags=re.IGNORECASE)
+        if not match:
+            continue
+        key, value = match.group(1).lower(), match.group(2)
+        if key == "bank":
+            settings["bank"] = money_units(value) / 10
+        elif re.fullmatch(r"\d+", value):
+            settings["free_transfers"] = int(value)
+        else:
+            raise ValueError(f"Free transfers must be a whole number in {path}: {value!r}")
+    return settings
+
+
 def evaluate_move(owned, outgoing, incoming, sales, bank, free_transfers, baseline, gameweek, horizon):
     """Validate a simultaneous transfer package, then compare it with holding.
 
@@ -274,62 +295,170 @@ def evaluate_move(owned, outgoing, incoming, sales, bank, free_transfers, baseli
             "reason": f"Reoptimising the XI and captain over {horizon} gameweeks gains {gross_gain:.2f} points before a {hit}-point transfer hit."}
 
 
-def shortlist(pool, size, affordable_ceiling):
-    """Keep high projections plus cheap funding options; pairs remain bounded.
+SIZE_KEYS = {1: "single", 2: "pair", 3: "triple"}
+RANK = lambda m: (-m["net_gain"], len(m["in"]), m["cost"], m["in_ids"])
+# Branches are cut only when their bound misses the cut-off by this many points,
+# covering bench-cover effects the stand-in does not bound strictly.
+BOUND_SLACK = 0.5
 
-    A full two-transfer search grows quadratically. Half this list is the highest
-    horizon projection, and half is the best available at low price brackets.
-    Singles still examine EVERY eligible player, without this shortlist filter.
+
+def undominated(pool, max_transfers):
+    """Drop players who can always be swapped for one no dearer and no worse.
+
+    Y dominates X when Y costs no more and projects at least as many points in
+    every horizon week. Swapping X for Y then keeps the package affordable and
+    cannot lower the best XI. The swap is blocked only if Y's club is full or Y
+    is another incoming player. The other 14 players fill at most four clubs, so
+    X is dropped only when its dominators outside the four largest-club groups
+    outnumber the other incoming slots. Dominators from X's own club are never
+    blocked by the club limit. Bench cover and captain fallback depend on
+    appearance probabilities as well, so this is exact for the XI, not the bench.
     """
-    pool = [p for p in pool if money_units(p["price"]) <= affordable_ceiling]
-    ranked = sorted(pool, key=lambda p: (-p["total_points"], money_units(p["price"]), p["pid"]))
-    chosen = ranked[: (size + 1) // 2]
-    # At each price choose its best player, then sweep upward from the cheapest.
-    # This keeps bench-budget releases that would disappear from a points-only list.
-    best_at_price = {}
-    for p in ranked:
-        best_at_price.setdefault(money_units(p["price"]), p)
-    for p in [best_at_price[cost] for cost in sorted(best_at_price)] + ranked:
-        if p not in chosen:
-            chosen.append(p)
-        if len(chosen) >= size:
-            break
-    return chosen[:size]
+    keep = []
+    for x in pool:
+        px = money_units(x["price"])
+        clubs = Counter()
+        for y in pool:
+            if y is x or money_units(y["price"]) > px:
+                continue
+            if any(a < b for a, b in zip(y["weekly_points"], x["weekly_points"])):
+                continue
+            if money_units(y["price"]) == px and y["weekly_points"] == x["weekly_points"] and y["pid"] > x["pid"]:
+                continue  # Identical players: keep exactly one.
+            clubs[y["club"]] += 1
+        own = clubs.pop(x["club"], 0)
+        if own + sum(sorted(clubs.values(), reverse=True)[4:]) < max_transfers:
+            keep.append(x)
+    return keep
+
+
+def price_ladder(pool):
+    """Prefix bests by price: the optimistic stand-in for any affordable player.
+
+    Each week takes the highest projection among affordable players, with that
+    player's appearance probability. Pairing it with the pool's lowest
+    appearance would be a strict bound, but bench cover for near-certain
+    non-starters makes it far too loose to prune anything.
+    """
+    pool = sorted(pool, key=lambda p: money_units(p["price"]))
+    prices, points, appearance = [], [], []
+    for p in pool:
+        if points:
+            pairs = [max(old, new) for old, new in zip(zip(points[-1], appearance[-1]),
+                                                       zip(p["weekly_points"], p["weekly_appearance_probability"]))]
+        else:
+            pairs = list(zip(p["weekly_points"], p["weekly_appearance_probability"]))
+        prices.append(money_units(p["price"]))
+        points.append([pts for pts, _ in pairs])
+        appearance.append([play for _, play in pairs])
+    return prices, points, appearance
 
 
 def search_moves(owned, candidates, sales, bank, free_transfers, baseline, gameweek, horizon,
-                 top=10, max_transfers=2, shortlist_size=8):
+                 top=10, max_transfers=3):
+    """Search every 1..max_transfers package, returning the best `top` per size.
+
+    Singles are evaluated exhaustively. Larger packages are a branch-and-bound
+    over undominated players: unfilled slots become one optimistic stand-in with
+    the best weekly points of any affordable player (see price_ladder). A
+    branch is cut once that bound, after hits and
+    BOUND_SLACK, cannot beat the current `top`-th package of its size. The bound
+    ignores club limits, so a club limit never causes a cut.
+    """
     pools = {pos: [p for p in candidates if p["position"] == pos] for pos in SQUAD_COUNTS}
-    results, counts = [], {"single_moves_evaluated": 0, "pair_moves_evaluated": 0}
-    def consider(outgoing, incoming, key):
+    best = {k: [] for k in range(1, max_transfers + 1)}
+    counts = Counter()
+
+    def threshold(k):
+        return best[k][-1]["net_gain"] if len(best[k]) >= top else 1e-9
+
+    def consider(outgoing, incoming):
         move = evaluate_move(owned, outgoing, incoming, sales, bank, free_transfers, baseline, gameweek, horizon)
-        if move is not None:
-            counts[key] += 1
-            if move["net_gain"] > 1e-9:
-                results.append(move)
+        if move is None:
+            return
+        k = len(outgoing)
+        counts[f"{SIZE_KEYS[k]}_moves_evaluated"] += 1
+        if move["net_gain"] > threshold(k):
+            best[k].append(move)
+            best[k].sort(key=RANK)
+            del best[k][top:]
+
     for outgoing in owned:
         for incoming in pools[outgoing["position"]]:
-            consider([outgoing], [incoming], "single_moves_evaluated")
-    if max_transfers >= 2:
-        for outgoing in itertools.combinations(owned, 2):
-            available = bank + sum(sales[p["pid"]] for p in outgoing)
-            # A partner's cheapest eligible incoming player defines the upper
-            # affordability bound. Do not require each individual leg to be funded.
-            pair_pools = [pools[p["position"]] for p in outgoing]
-            if any(not pool for pool in pair_pools):
+            consider([outgoing], [incoming])
+
+    frontier = {pos: sorted(undominated(pool, max_transfers), key=lambda p: (-p["total_points"], money_units(p["price"]), p["pid"]))
+                for pos, pool in pools.items()}
+    ladders = {pos: price_ladder(pool) for pos, pool in frontier.items()}
+    cheapest = {pos: ladder[0][0] if ladder[0] else None for pos, ladder in ladders.items()}
+    counts.update({f"{pos}_undominated": len(pool) for pos, pool in frontier.items()})
+
+    def bound(kept, chosen, slots, budget):
+        """Net gain if each unfilled slot held its optimistic affordable stand-in."""
+        stand_ins = []
+        for j, pos in enumerate(slots):
+            prices, points, appearance = ladders[pos]
+            ceiling = budget - sum(cheapest[p] for p in slots[j + 1:])
+            i = bisect.bisect_right(prices, ceiling) - 1
+            if i < 0:
+                return None
+            stand_ins.append({"pid": f"~{j}", "name": "bound", "club": f"~{j}", "position": pos,
+                              "weekly_points": points[i], "weekly_appearance_probability": appearance[i]})
+            budget -= cheapest[pos]
+        counts["bounds_evaluated"] += 1
+        projected = project_squad(kept + chosen + stand_ins, gameweek, horizon)["total_points"]
+        return projected - baseline["total_points"] - 4 * max(0, len(chosen) + len(slots) - free_transfers)
+
+    for k in range(2, max_transfers + 1):
+        roots = []
+        for outgoing in itertools.combinations(owned, k):
+            # Same-position slots are adjacent, so unordered incoming sets can be
+            # enumerated once by requiring increasing frontier indices.
+            outgoing = sorted(outgoing, key=lambda p: list(SQUAD_COUNTS).index(p["position"]))
+            slots = [p["position"] for p in outgoing]
+            if any(cheapest[pos] is None for pos in slots):
                 continue
-            minimum_prices = [min(money_units(p["price"]) for p in pool) for pool in pair_pools]
-            lists = [shortlist(pair_pools[i], shortlist_size, available - minimum_prices[1-i]) for i in range(2)]
-            seen_pairs = set()
-            for incoming in itertools.product(*lists):
-                key = tuple(sorted(p["pid"] for p in incoming))
-                if key in seen_pairs:
+            out_ids = {p["pid"] for p in outgoing}
+            kept = [p for p in owned if p["pid"] not in out_ids]
+            budget = bank + sum(sales[p["pid"]] for p in outgoing)
+            root = bound(kept, [], slots, budget)
+            if root is not None:
+                roots.append((root, outgoing, slots, kept, budget))
+        # Most promising outgoing sets first; once a root bound fails, all later ones do.
+        roots.sort(key=lambda r: -r[0])
+
+        def extend(outgoing, slots, kept, chosen, budget, start):
+            j = len(chosen)
+            if j == len(slots):
+                consider(outgoing, chosen)
+                return
+            pos = slots[j]
+            reserve = sum(cheapest[p] for p in slots[j + 1:])
+            clubs = Counter(p["club"] for p in kept + chosen)
+            for i in range(start, len(frontier[pos])):
+                player = frontier[pos][i]
+                price = money_units(player["price"])
+                if price > budget - reserve or clubs[player["club"]] >= 3:
                     continue
-                seen_pairs.add(key)
-                consider(outgoing, incoming, "pair_moves_evaluated")
-    results.sort(key=lambda m: (-m["net_gain"], len(m["in"]), m["cost"], m["in_ids"]))
-    counts.update(shortlist_per_outgoing=shortlist_size, max_transfers=max_transfers)
-    return results[:top], counts, [m for m in results if len(m["in"]) == 1][:top], [m for m in results if len(m["in"]) == 2][:top]
+                rest = slots[j + 1:]
+                if rest:
+                    upper = bound(kept, chosen + [player], rest, budget - price)
+                    if upper is None or upper + BOUND_SLACK <= threshold(len(slots)):
+                        counts[f"{SIZE_KEYS[len(slots)]}_branches_pruned"] += 1
+                        continue
+                next_start = i + 1 if rest and rest[0] == pos else 0
+                extend(outgoing, slots, kept, chosen + [player], budget - price, next_start)
+
+        for root, outgoing, slots, kept, budget in roots:
+            if root + BOUND_SLACK <= threshold(k):
+                counts[f"{SIZE_KEYS[k]}_outgoing_sets_pruned"] += 1
+                continue
+            extend(outgoing, slots, kept, [], budget, 0)
+
+    by_size = {k: moves for k, moves in best.items()}
+    overall = sorted((m for moves in best.values() for m in moves), key=RANK)[:top]
+    counts["max_transfers"] = max_transfers
+    return overall, dict(counts), by_size
 
 
 def data_revision(data):
@@ -407,8 +536,8 @@ def build_report(args):
     baseline_projection = project_squad(owned, gw, args.horizon)
     baseline_projection["players"] = owned
     candidates = sorted((p for p in players if not p["owned"]), key=lambda p: (-p["total_points"], p["pid"]))
-    moves, search, single_moves, pair_moves = search_moves(owned, candidates, sales, money_units(args.bank), args.free_transfers,
-                                 baseline_projection, gw, args.horizon, args.top, args.max_transfers, args.shortlist)
+    moves, search, by_size = search_moves(owned, candidates, sales, money_units(args.bank), args.free_transfers,
+                                          baseline_projection, gw, args.horizon, args.top, args.max_transfers)
     if excluded_prices:
         warnings.append(f"Excluded {excluded_prices} candidates with no usable snapshot price.")
     warnings.append(f"No live data was fetched. All projections use local pre-GW{gw} evidence and availability held fixed throughout the horizon.")
@@ -421,10 +550,10 @@ def build_report(args):
             "training_gameweeks": sorted({r["_gw"] for rows in history.values() for r in rows}), "training_matches": len(matches),
             "players": sorted(players, key=lambda p: (-p["total_points"], p["pid"])),
             "candidates": candidates[:args.top], "current_team": baseline_projection,
-            "moves": moves, "single_moves": single_moves, "pair_moves": pair_moves, "recommended_action": "transfer" if moves else "hold", "search": search,
+            "moves": moves, **{f"{SIZE_KEYS[k]}_moves": by_size.get(k, []) for k in SIZE_KEYS}, "recommended_action": "transfer" if moves else "hold", "search": search,
             "warnings": warnings, "candidate_availability_notes": candidate_warnings,
             "assumptions": [
-                f"Bank is £{money_units(args.bank) / 10:.1f}m and {args.free_transfers} free transfer(s), supplied by arguments (defaults: £0.0m, one free transfer).",
+                f"Bank is £{money_units(args.bank) / 10:.1f}m and {args.free_transfers} free transfer(s), from {args.settings_source}.",
                 "Markdown prices are provisional selling proceeds unless overridden with --selling-prices JSON. FPL selling prices can differ from market prices because only half of a price rise is retained.",
                 "Incoming prices are from the latest eligible local playerstats snapshot, already in £m. No price-change forecasts are made.",
                 "All moves happen before the first gameweek; the resulting squad is held for the entire horizon. Hits cost four points per transfer beyond the supplied free transfers, paid once. No chips or later transfers are modelled.",
@@ -432,7 +561,7 @@ def build_report(args):
                 "Deterministic screening integrates the same fitted rates and minute distributions as the simulator, but omits squad-dependent goal/assist share normalisation. Compare every transfer gain with the analytic hold baseline, not the Monte Carlo total.",
                 "Each week selects the highest projected legal XI and its highest projected captain/vice; bench effects are evaluated after XI selection. Captain fallback and legal autosubs use independent appearance probabilities.",
                 "Bonus is an independent historical mean, xA approximates FPL assists, and Poisson assumptions approximate defensive contributions, saves and rare events. Current availability may double-count historical injury absence.",
-                f"Every eligible single swap is examined. Two-transfer plans use at most {args.shortlist} candidates per departing player, combining high projections and cheap funding options: this is not an exhaustive global two-transfer optimum.",
+                f"Every eligible single swap is examined. Packages of two to {args.max_transfers} transfers are searched exhaustively by branch and bound: a player is skipped only when enough others in the same position cost no more and project at least as many points every week, and a branch is cut only when an optimistic bound cannot reach the best {args.top} of its size. Dominance ignores appearance-driven bench cover, so near-ties may differ slightly from a brute-force search.",
                 "Candidates need at least one positive-minute history row and a usable price. Unknown new arrivals are omitted; positive gains are estimates rather than guaranteed improvements.",
                 "Holding saves a transfer for future flexibility, which has no explicit points value in this fixed-horizon model. Very small positive gains should be treated cautiously.",
                 "Rules reference: https://www.premierleague.com/en/news/2174907 (checked 9 October 2026)."]}
@@ -446,16 +575,30 @@ def parse_args(argv=None):
     parser.add_argument("--gameweek", type=int)
     parser.add_argument("--lookback", type=int, default=8)
     parser.add_argument("--horizon", type=int, default=3)
-    parser.add_argument("--bank", type=float, default=0.0, help="Money in bank, £m (default: 0)")
-    parser.add_argument("--free-transfers", type=int, default=1)
+    parser.add_argument("--bank", type=float, help="Money in bank, £m (default: team file's Bank line, else 0)")
+    parser.add_argument("--free-transfers", type=int, help="Default: team file's Free transfers line, else 1")
     parser.add_argument("--selling-prices", type=Path, help='JSON object such as {"Haaland": 15.2}, in £m')
-    parser.add_argument("--max-transfers", type=int, choices=(1, 2), default=2)
-    parser.add_argument("--shortlist", type=int, default=8, help="Candidates per departing player for pair search (default: 8)")
+    parser.add_argument("--max-transfers", type=int, choices=(1, 2, 3), default=3)
     parser.add_argument("--top", type=int, default=10)
     parser.add_argument("--json-output", type=Path)
     args = parser.parse_args(argv)
-    if min(args.horizon, args.lookback, args.top, args.shortlist) < 1:
-        parser.error("--horizon, --lookback, --top and --shortlist must be positive")
+    if min(args.horizon, args.lookback, args.top) < 1:
+        parser.error("--horizon, --lookback and --top must be positive")
+    try:
+        settings = team_settings(args.team)
+    except (OSError, ValueError) as exc:
+        parser.error(str(exc))
+    sources = []
+    for key, default, label in (("bank", 0.0, "bank"), ("free_transfers", 1, "free transfers")):
+        if getattr(args, key) is not None:
+            sources.append(f"{label} from arguments")
+        elif key in settings:
+            setattr(args, key, settings[key])
+            sources.append(f"{label} from {args.team.name}")
+        else:
+            setattr(args, key, default)
+            sources.append(f"{label} defaulted")
+    args.settings_source = ", ".join(sources)
     if not 0 <= args.free_transfers <= 5:
         parser.error("--free-transfers must be between zero and five")
     try:
@@ -486,7 +629,18 @@ def main(argv=None):
         print("Hold: no searched transfer plan has a positive net gain.")
     for i, move in enumerate(report["moves"], 1):
         print(f"{i:2}. {', '.join(move['out'])} -> {', '.join(move['in'])}: +{move['net_gain']:.2f} pts, hit {move['hit']}, bank £{move['bank_after']:.1f}m")
-    print(f"\nEvaluated {report['search']['single_moves_evaluated']} legal affordable singles and {report['search']['pair_moves_evaluated']} shortlisted pairs.")
+    for k, label in SIZE_KEYS.items():
+        if k > args.max_transfers:
+            continue
+        print(f"\nBest {k}-transfer options:")
+        options = report[f"{label}_moves"]
+        if not options:
+            print("None with a positive net gain.")
+        for i, move in enumerate(options, 1):
+            print(f"{i:2}. {', '.join(move['out'])} -> {', '.join(move['in'])}: +{move['net_gain']:.2f} pts, hit {move['hit']}, bank £{move['bank_after']:.1f}m")
+    search = report["search"]
+    print("\nEvaluated " + ", ".join(f"{search.get(f'{label}_moves_evaluated', 0):,} {label}s" for k, label in SIZE_KEYS.items() if k <= args.max_transfers)
+          + f" ({search.get('bounds_evaluated', 0):,} bounds).")
     print("\nAssumptions:")
     for note in report["assumptions"] + report["warnings"]:
         print("- " + note)

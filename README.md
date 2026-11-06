@@ -3,7 +3,7 @@
 Project repository: [JudeHards/fpl-planner](https://github.com/JudeHards/fpl-planner).
 
 Estimate your current squad, screen transfer targets, and regenerate a single
-report with affordable one- and two-player packages. Everything runs locally with
+report with the best affordable one-, two- and three-transfer packages. Everything runs locally with
 Python 3.10+ and the standard library. The scripts never submit FPL transfers.
 
 ```sh
@@ -18,7 +18,8 @@ refreshes both analysis JSONs before compiling the report.
 # Screen players and transfers separately:
 python3 find_transfers.py --json-output transfer-results.json
 
-# Replace the default £0.0m bank / one free transfer with actual values:
+# Bank and free transfers are read from the "Bank:" and "Free transfers:"
+# lines in current-team.md. Override them for a what-if:
 python3 build_report.py --bank 1.5 --free-transfers 2
 
 # Compile saved outputs without rerunning analyses (uses their saved assumptions):
@@ -26,17 +27,25 @@ python3 build_report.py --from-json
 ```
 
 `find_transfers.py` defaults to a three-gameweek horizon and compares keeping the
-squad with immediate one- and two-player changes, held for that horizon. It uses
+squad with immediate one-, two- and three-player changes, held for that horizon. It uses
 the same fitted player and team rates as the simulation, with a faster analytic
 screening approximation. All gains are relative to that method's own holding
 baseline, after legal XI selection, captaincy, bench cover and transfer hits.
 
 The script checks position quotas, player uniqueness, the three-per-club limit
-and combined affordability. Two-player packages can fund an upgrade by selling a
-more expensive player elsewhere. Their search uses bounded shortlists, so the
-best result is the best found rather than a guaranteed global optimum. Holding
-is preferable when no tested move has a positive net gain. The model does not
-price the future value of saving a free transfer.
+and combined affordability. Larger packages can fund an upgrade by selling a
+more expensive player elsewhere. It reports the ten best packages for each
+transfer count, with a four-point hit for each transfer beyond your free ones.
+
+Every single swap is tested. Two- and three-transfer packages cover every
+combination by branch and bound, which runs in well under a minute. A player is
+skipped only if enough others in the same position cost no more and project at
+least as many points in every week, so a full club cannot block them all. A
+branch is cut only when an optimistic "best affordable player" stand-in still
+misses the current top ten by more than half a point. That stand-in is not a
+strict bound on bench cover, so a very close alternative can occasionally be
+missed. Holding is preferable when no package has a positive net gain. The model
+does not price the future value of saving a free transfer.
 
 Prices in `current-team.md` are **provisional selling values**, not verified FPL
 sale proceeds. To supply actual values, create a JSON object such as
@@ -86,8 +95,7 @@ python3 simulate_points.py --captain Haaland --vice-captain Mbeumo
 python3 simulate_points.py --help
 ```
 
-The default is the latest local season and its `is_next` gameweek. In the supplied
-data this is **2026/27 GW6**, trained on **50 completed GW1–5 league matches**.
+The default is the latest local season and its `is_next` gameweek. 
 The Markdown file's clubs disambiguate names such as Thomas and Palmer. The
 CSV schedule supplies the fixtures; differences from the Markdown are reported.
 An explicit `--gameweek` selects another week, including blanks or double weeks.
