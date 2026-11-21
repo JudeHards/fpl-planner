@@ -189,7 +189,7 @@ class TransferRulesTests(unittest.TestCase):
     def test_team_file_supplies_bank_and_free_transfers(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "team.md"
-            path.write_text("Gameweek: 8  \nBank: £0.7m  \nFree transfers: 3  \n")
+            path.write_text("Gameweek: 8  \nBank: £0.7m  \nFree transfers: 3  \n", encoding="utf-8")
             self.assertEqual(transfer.team_settings(path), {"bank": 0.7, "free_transfers": 3})
             path.write_text("Free transfers: three\n")
             with self.assertRaises(ValueError):

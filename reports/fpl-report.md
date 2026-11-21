@@ -1,46 +1,46 @@
 # FPL squad and transfer report
 
-2026-2027 • GW10–12 • Generated 06 November 2026, 16:44 GMT • Deadline 06 November 2026, 18:30 GMT
+2026-2027 • GW11–13 • Generated 21 November 2026, 10:21 GMT • Deadline 21 November 2026, 11:00 GMT
 
-**Current team · next GW: 55.4 pts** · **Simulated middle 80%: 39–73 pts** · **Best move · net horizon gain: +11.60 pts**
+**Current team · next GW: 58.8 pts** · **Simulated middle 80%: 41–77 pts** · **Best move · net horizon gain: +3.22 pts**
 
 ## Decision to consider
 
-The highest-ranked package in this search is **Thomas, Emersonn → Van Hecke, Barry**. It adds an estimated **11.60 team points over GW10–12 after a 0-point hit**, leaving £2.3m in the bank under the assumptions below.
+The highest-ranked package in this search is **Ajer → Hill**. It adds an estimated **3.22 team points over GW11–13 after a 0-point hit**, leaving £1.2m in the bank under the assumptions below.
 
 Treat this as a shortlist to check before the deadline. The ranking depends on provisional selling prices, local injury flags and a small sample of matches; it is not a calibrated forecast.
 
-Budget assumed: **£3.4m**. Free transfers assumed: **2**. Listed squad prices are provisional sale proceeds unless explicitly overridden. Check the selling values shown in FPL before acting. All proposed packages are made now and then held through the horizon; future transfers are not planned.
+Budget assumed: **£2.3m**. Free transfers assumed: **1**. Listed squad prices are provisional sale proceeds unless explicitly overridden. Check the selling values shown in FPL before acting. All proposed packages are made now and then held through the horizon; future transfers are not planned.
 
 ## Current team and selection
 
-The Monte Carlo forecast for GW10 is **55.43 points**, including captaincy and automatic substitutions. Median 55; 10th–90th percentile 39–73. Captain **Gabriel**, vice-captain **Evanilson**.
+The Monte Carlo forecast for GW11 is **58.81 points**, including captaincy and automatic substitutions. Median 58; 10th–90th percentile 41–77. Captain **Van Hecke**, vice-captain **Barry**.
 
-Starting XI: Raya, Gabriel, Konsa, Ajer, De Cuyper, Rogers, Groß, Tavernier, Mbeumo, Evanilson, Haaland. Bench order (reserve goalkeeper separate in use): Lewis-Potter, Emersonn, Thomas, Scherpen.
+Starting XI: Raya, Gabriel, Konsa, Van Hecke, De Cuyper, Rogers, Tavernier, Groß, Evanilson, Barry, Haaland. Bench order (reserve goalkeeper separate in use): Ajer, Mbeumo, Lewis-Potter, Scherpen.
 
-| Player | Pos | Selection | Assumed sale | GW10 MC xPts | GW10–12 screen xPts | Next GW minutes | Availability |
+| Player | Pos | Selection | Assumed sale | GW11 MC xPts | GW11–13 screen xPts | Next GW minutes | Availability |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Raya | GKP | XI | £6.1m | 4.55 | 12.71 | 90 | 100% |
-| Scherpen | GKP | Reserve GK | £4.4m | 0.46 | 1.56 | 16 | 100% |
-| Gabriel | DEF | XI (C) | £7.9m | 5.73 | 16.20 | 90 | 100% |
-| Konsa | DEF | XI | £4.6m | 3.96 | 11.14 | 65 | 75% |
-| Ajer | DEF | XI | £4.5m | 3.33 | 10.67 | 90 | 100% |
-| De Cuyper | DEF | XI | £5.0m | 4.02 | 12.15 | 82 | 100% |
-| Thomas | DEF | Bench 3 | £4.0m | 1.26 | 4.02 | 31 | 50% |
-| Rogers | MID | XI | £7.9m | 4.03 | 11.58 | 89 | 100% |
-| Lewis-Potter | MID | Bench 1 | £5.5m | 3.14 | 9.63 | 79 | 100% |
-| Groß | MID | XI | £6.1m | 3.77 | 11.14 | 87 | 100% |
-| Tavernier | MID | XI | £6.4m | 5.27 | 14.37 | 83 | 100% |
-| Mbeumo | MID | XI | £7.9m | 4.09 | 12.09 | 90 | 100% |
-| Evanilson | FWD | XI (VC) | £6.3m | 5.38 | 14.77 | 83 | 100% |
-| Emersonn | FWD | Bench 2 | £5.5m | 2.97 | 8.91 | 69 | 100% |
-| Haaland | FWD | XI | £15.6m | 4.80 | 14.58 | 89 | 100% |
+| Raya | GKP | XI | £6.1m | 4.24 | 12.24 | 90 | 100% |
+| Scherpen | GKP | Reserve GK | £4.4m | 0.32 | 1.04 | 10 | 100% |
+| Gabriel | DEF | XI | £8.0m | 5.16 | 15.13 | 90 | 100% |
+| Konsa | DEF | XI | £4.7m | 5.04 | 14.70 | 90 | 100% |
+| Ajer | DEF | Bench 1 | £4.5m | 3.72 | 10.63 | 90 | 100% |
+| Van Hecke | DEF | XI (C) | £5.0m | 5.76 | 15.84 | 90 | 100% |
+| De Cuyper | DEF | XI | £5.0m | 4.48 | 12.50 | 81 | 100% |
+| Rogers | MID | XI | £7.9m | 3.88 | 11.97 | 89 | 100% |
+| Tavernier | MID | XI | £6.5m | 4.56 | 13.82 | 84 | 100% |
+| Lewis-Potter | MID | Bench 3 | £5.5m | 2.82 | 8.36 | 74 | 100% |
+| Groß | MID | XI | £6.2m | 4.48 | 13.16 | 88 | 100% |
+| Mbeumo | MID | Bench 2 | £7.8m | 3.51 | 11.38 | 88 | 100% |
+| Evanilson | FWD | XI | £6.3m | 5.13 | 15.47 | 84 | 100% |
+| Barry | FWD | XI (VC) | £5.6m | 5.53 | 16.43 | 87 | 100% |
+| Haaland | FWD | XI | £15.6m | 4.79 | 13.95 | 89 | 100% |
 
 Player xPts above are before captain doubling and bench selection. Availability is the local fitness flag; expected minutes also reflect recent starts and nonappearances. The multiweek screen is an analytic approximation, so its values differ slightly from the simulation.
 
-| Scenario | GW10 | GW11 | GW12 | Total before hits |
+| Scenario | GW11 | GW12 | GW13 | Total before hits |
 | --- | --- | --- | --- | --- |
-| Hold — comparison baseline | 55.63 | 53.54 | 50.85 | 160.03 |
+| Hold — comparison baseline | 58.79 | 55.69 | 58.28 | 172.77 |
 
 ## Possible transfers
 
@@ -50,47 +50,40 @@ Every gain below compares the updated squad with the **same analytic holding bas
 
 | Out | In | Net spend | Bank left | Gross gain | Hit | Net gain |
 | --- | --- | --- | --- | --- | --- | --- |
-| Ajer | Van Hecke | £0.5m | £2.9m | +7.68 | 0 | +7.68 |
-| Thomas | Van Hecke | £1.0m | £2.4m | +7.40 | 0 | +7.40 |
-| De Cuyper | Van Hecke | £0.0m | £3.4m | +6.20 | 0 | +6.20 |
-| Konsa | Van Hecke | £0.4m | £3.0m | +4.80 | 0 | +4.80 |
-| Emersonn | Barry | £0.1m | £3.3m | +4.12 | 0 | +4.12 |
-| Ajer | Hill | £1.1m | £2.3m | +3.57 | 0 | +3.57 |
+| Ajer | Hill | £1.1m | £1.2m | +3.22 | 0 | +3.22 |
+| Mbeumo | E.Le Fée | −£2.1m | £4.4m | +2.50 | 0 | +2.50 |
+| Lewis-Potter | E.Le Fée | £0.2m | £2.1m | +2.50 | 0 | +2.50 |
+| Haaland | N.Jackson | −£8.4m | £10.7m | +2.25 | 0 | +2.25 |
+| De Cuyper | Hill | £0.6m | £1.7m | +2.01 | 0 | +2.01 |
+| Ajer | Muharemović | £0.6m | £1.7m | +1.76 | 0 | +1.76 |
 
 ### Best two-transfer packages
 
 | Out | In | Net spend | Bank left | Gross gain | Hit | Net gain |
 | --- | --- | --- | --- | --- | --- | --- |
-| Thomas, Emersonn | Van Hecke, Barry | £1.1m | £2.3m | +11.60 | 0 | +11.60 |
-| Ajer, Emersonn | Van Hecke, Barry | £0.6m | £2.8m | +11.50 | 0 | +11.50 |
-| Thomas, Emersonn | Van Hecke, N.Jackson | £2.5m | £0.9m | +10.90 | 0 | +10.90 |
-| Ajer, Emersonn | Van Hecke, N.Jackson | £2.0m | £1.4m | +10.80 | 0 | +10.80 |
-| Ajer, Thomas | Van Hecke, Hill | £2.1m | £1.3m | +10.67 | 0 | +10.67 |
-| De Cuyper, Emersonn | Van Hecke, Barry | £0.1m | £3.3m | +10.32 | 0 | +10.32 |
+| Ajer, Haaland | Hill, N.Jackson | −£7.3m | £9.6m | +5.47 | 4 | +1.47 |
+| Ajer, Mbeumo | Hill, E.Le Fée | −£1.0m | £3.3m | +4.87 | 4 | +0.87 |
+| Ajer, Lewis-Potter | Hill, E.Le Fée | £1.3m | £1.0m | +4.87 | 4 | +0.87 |
+| Mbeumo, Haaland | E.Le Fée, N.Jackson | −£10.5m | £12.8m | +4.75 | 4 | +0.75 |
+| Lewis-Potter, Haaland | E.Le Fée, N.Jackson | −£8.2m | £10.5m | +4.75 | 4 | +0.75 |
+| Scherpen, Ajer | Trafford, Hill | £1.7m | £0.6m | +4.71 | 4 | +0.71 |
 
 ### Best three-transfer packages
 
-| Out | In | Net spend | Bank left | Gross gain | Hit | Net gain |
-| --- | --- | --- | --- | --- | --- | --- |
-| De Cuyper, Thomas, Emersonn | Van Hecke, Hill, Barry | £1.7m | £1.7m | +13.69 | 4 | +9.69 |
-| Thomas, Rogers, Emersonn | Van Hecke, Iwobi, Barry | −£1.4m | £4.8m | +13.67 | 4 | +9.67 |
-| Ajer, De Cuyper, Emersonn | Van Hecke, Hill, Barry | £1.2m | £2.2m | +13.59 | 4 | +9.59 |
-| Ajer, Rogers, Emersonn | Van Hecke, Iwobi, Barry | −£1.9m | £5.3m | +13.57 | 4 | +9.57 |
-| Ajer, Thomas, Emersonn | Van Hecke, Hill, Barry | £2.2m | £1.2m | +13.55 | 4 | +9.55 |
-| Ajer, Thomas, Emersonn | Van Hecke, Robertson, Barry | £0.9m | £2.5m | +13.46 | 4 | +9.46 |
+No package of this size has a positive net gain.
 
 A negative net spend releases money. Only positive net gains are shown; holding is always available. A saved free transfer has future option value that the model does not price.
 
 ### Leading package by gameweek
 
-| Scenario | GW10 | GW11 | GW12 | After-hit total |
+| Scenario | GW11 | GW12 | GW13 | After-hit total |
 | --- | --- | --- | --- | --- |
-| Hold | 55.63 | 53.54 | 50.85 | 160.03 |
-| Leading package (GW values before hit) | 59.39 | 58.28 | 53.95 | 171.62 |
+| Hold | 58.79 | 55.69 | 58.28 | 172.77 |
+| Leading package (GW values before hit) | 59.98 | 56.57 | 59.44 | 175.99 |
 
-After this package in GW10: captain **Gabriel**, vice **Van Hecke**. XI: Raya, Gabriel, Van Hecke, De Cuyper, Konsa, Tavernier, Mbeumo, Rogers, Evanilson, Barry, Haaland. Bench: Groß, Ajer, Lewis-Potter, Scherpen.
+After this package in GW11: captain **Van Hecke**, vice **Barry**. XI: Raya, Van Hecke, Gabriel, Hill, Konsa, De Cuyper, Tavernier, Groß, Barry, Evanilson, Haaland. Bench: Rogers, Mbeumo, Lewis-Potter, Scherpen.
 
-Reoptimising the XI and captain over 3 gameweeks gains 11.60 points before a 0-point transfer hit.
+Reoptimising the XI and captain over 3 gameweeks gains 3.22 points before a 0-point transfer hit.
 
 ## Players to watch by position
 
@@ -98,61 +91,59 @@ These are the highest projected unowned players, regardless of whether you can a
 
 ### Goalkeepers
 
-| Player | Club | Buy | GW10–12 xPts | Availability | Fixtures |
+| Player | Club | Buy | GW11–13 xPts | Availability | Fixtures |
 | --- | --- | --- | --- | --- | --- |
-| Verbruggen | Brighton | £4.6m | 12.40 | 100% | GW10: Brentford (H); GW11: Hull City (A); GW12: Newcastle (H) |
-| Trafford | Leeds | £5.0m | 12.21 | 100% | GW10: Spurs (H); GW11: Chelsea (A); GW12: Coventry City (H) |
-| Kinsky | Spurs | £4.4m | 11.86 | 100% | GW10: Leeds (A); GW11: Ipswich Town (H); GW12: Sunderland (A) |
-| Pickford | Everton | £5.5m | 11.08 | 100% | GW10: Coventry City (H); GW11: Brentford (A); GW12: Liverpool (H) |
-| A.Becker | Liverpool | £5.5m | 10.57 | 100% | GW10: Crystal Palace (A); GW11: Man Utd (H); GW12: Everton (A) |
+| Trafford | Leeds | £5.0m | 13.20 | 100% | GW11: Chelsea (A); GW12: Coventry City (H); GW13: Man City (A) |
+| Verbruggen | Brighton | £4.7m | 11.66 | 100% | GW11: Hull City (A); GW12: Newcastle (H); GW13: Bournemouth (A) |
+| Kinsky | Spurs | £4.4m | 11.45 | 100% | GW11: Ipswich Town (H); GW12: Sunderland (A); GW13: Fulham (H) |
+| Tzolakis | Hull City | £4.7m | 11.38 | 100% | GW11: Brighton (H); GW12: Crystal Palace (A); GW13: Nott'm Forest (H) |
+| A.Becker | Liverpool | £5.5m | 11.09 | 100% | GW11: Man Utd (H); GW12: Everton (A); GW13: Sunderland (H) |
 
 ### Defenders
 
-| Player | Club | Buy | GW10–12 xPts | Availability | Fixtures |
+| Player | Club | Buy | GW11–13 xPts | Availability | Fixtures |
 | --- | --- | --- | --- | --- | --- |
-| Van Hecke | Spurs | £5.0m | 17.11 | 100% | GW10: Leeds (A); GW11: Ipswich Town (H); GW12: Sunderland (A) |
-| Hill | Bournemouth | £5.6m | 14.24 | 100% | GW10: Ipswich Town (A); GW11: Nott'm Forest (H); GW12: Fulham (A) |
-| Silva | Bournemouth | £5.1m | 13.70 | 100% | GW10: Ipswich Town (A); GW11: Nott'm Forest (H); GW12: Fulham (A) |
-| Vuskovic | Brighton | £5.2m | 13.06 | 100% | GW10: Brentford (H); GW11: Hull City (A); GW12: Newcastle (H) |
-| Muharemović | Leeds | £5.1m | 12.57 | 100% | GW10: Spurs (H); GW11: Chelsea (A); GW12: Coventry City (H) |
+| Hill | Bournemouth | £5.6m | 14.95 | 100% | GW11: Nott'm Forest (H); GW12: Fulham (A); GW13: Brighton (H) |
+| Muharemović | Leeds | £5.1m | 13.48 | 100% | GW11: Chelsea (A); GW12: Coventry City (H); GW13: Man City (A) |
+| Vuskovic | Brighton | £5.3m | 13.36 | 100% | GW11: Hull City (A); GW12: Newcastle (H); GW13: Bournemouth (A) |
+| Silva | Bournemouth | £5.1m | 13.32 | 100% | GW11: Nott'm Forest (H); GW12: Fulham (A); GW13: Brighton (H) |
+| Araujo | Liverpool | £5.5m | 13.31 | 100% | GW11: Man Utd (H); GW12: Everton (A); GW13: Sunderland (H) |
 
 ### Midfielders
 
-| Player | Club | Buy | GW10–12 xPts | Availability | Fixtures |
+| Player | Club | Buy | GW11–13 xPts | Availability | Fixtures |
 | --- | --- | --- | --- | --- | --- |
-| Iwobi | Fulham | £5.4m | 13.65 | 100% | GW10: Newcastle (H); GW11: Man City (A); GW12: Bournemouth (H) |
-| Rice | Arsenal | £7.4m | 13.39 | 100% | GW10: Hull City (H); GW11: Newcastle (A); GW12: Man City (H) |
-| Rudoni | Coventry City | £4.9m | 12.49 | 100% | GW10: Everton (A); GW11: Crystal Palace (H); GW12: Leeds (A) |
-| E.Le Fée | Sunderland | £5.7m | 12.30 | 100% | GW10: Chelsea (H); GW11: Aston Villa (A); GW12: Spurs (H) |
-| Ayari | Brighton | £5.4m | 12.29 | 100% | GW10: Brentford (H); GW11: Hull City (A); GW12: Newcastle (H) |
+| E.Le Fée | Sunderland | £5.7m | 14.22 | 100% | GW11: Aston Villa (A); GW12: Spurs (H); GW13: Liverpool (A) |
+| Ødegaard | Arsenal | £6.7m | 13.34 | 100% | GW11: Newcastle (A); GW12: Man City (H); GW13: Brentford (A) |
+| McGinn | Aston Villa | £5.5m | 12.99 | 100% | GW11: Sunderland (H); GW12: Ipswich Town (A); GW13: Everton (H) |
+| Rudoni | Coventry City | £4.9m | 12.80 | 100% | GW11: Crystal Palace (H); GW12: Leeds (A); GW13: Ipswich Town (H) |
+| Dewsbury-Hall | Everton | £6.7m | 12.71 | 100% | GW11: Brentford (A); GW12: Liverpool (H); GW13: Aston Villa (A) |
 
 ### Forwards
 
-| Player | Club | Buy | GW10–12 xPts | Availability | Fixtures |
+| Player | Club | Buy | GW11–13 xPts | Availability | Fixtures |
 | --- | --- | --- | --- | --- | --- |
-| Barry | Everton | £5.6m | 15.07 | 100% | GW10: Coventry City (H); GW11: Brentford (A); GW12: Liverpool (H) |
-| N.Jackson | Aston Villa | £7.0m | 14.37 | 100% | GW10: Man Utd (A); GW11: Sunderland (H); GW12: Ipswich Town (A) |
-| Isak | Liverpool | £9.2m | 12.92 | 100% | GW10: Crystal Palace (A); GW11: Man Utd (H); GW12: Everton (A) |
-| Thiago | Brentford | £7.8m | 12.70 | 100% | GW10: Brighton (A); GW11: Everton (H); GW12: Man Utd (A) |
-| McBurnie | Hull City | £5.5m | 12.22 | 100% | GW10: Arsenal (A); GW11: Brighton (H); GW12: Crystal Palace (A) |
+| N.Jackson | Aston Villa | £7.2m | 16.03 | 100% | GW11: Sunderland (H); GW12: Ipswich Town (A); GW13: Everton (H) |
+| Isak | Liverpool | £9.3m | 13.33 | 100% | GW11: Man Utd (H); GW12: Everton (A); GW13: Sunderland (H) |
+| Calvert-Lewin | Leeds | £6.0m | 11.93 | 100% | GW11: Chelsea (A); GW12: Coventry City (H); GW13: Man City (A) |
+| McBurnie | Hull City | £5.5m | 11.66 | 100% | GW11: Brighton (H); GW12: Crystal Palace (A); GW13: Nott'm Forest (H) |
+| Delap | Nott'm Forest | £5.3m | 11.54 | 100% | GW11: Bournemouth (A); GW12: Chelsea (H); GW13: Hull City (A) |
 
 ## Availability and checks before acting
 
-- Konsa: 75% availability in local GW9 snapshot. Knee injury - 75% chance of playing
-- Thomas: 50% availability in local GW9 snapshot. Calf injury - 50% chance of playing
-- No live data was fetched. All projections use local pre-GW10 evidence and availability held fixed throughout the horizon.
+- No live data was fetched. All projections use local pre-GW11 evidence and availability held fixed throughout the horizon.
 
 Before making a move, confirm your bank balance, free transfers, selling prices and the latest team news in FPL. No transfer has been submitted by these scripts.
 
 ## Method and limitations
 
-Training uses 80 completed Premier League matches from gameweeks 2, 3, 4, 5, 6, 7, 8, 9. The current-team result uses 20,000 simulations with seed 42; its Monte Carlo standard error is 0.09 points. This measures simulation noise only, not model accuracy.
+Training uses 80 completed Premier League matches from gameweeks 3, 4, 5, 6, 7, 8, 9, 10. The current-team result uses 20,000 simulations with seed 42; its Monte Carlo standard error is 0.10 points. This measures simulation noise only, not model accuracy.
 
-Transfer search: 1,907 1-transfer, 1,783 2-transfer, 7,780 3-transfer packages evaluated in full. Every single swap is tested. Larger packages are searched by branch and bound: players beaten on price and every week's projection are skipped, and branches whose optimistic bound cannot reach the top results are cut. The bound is not strict for bench cover, so very close alternatives can be missed.
+Transfer search: 1,867 1-transfer, 1,403 2-transfer, 0 3-transfer packages evaluated in full. Every single swap is tested. Larger packages are searched by branch and bound: players beaten on price and every week's projection are skipped, and branches whose optimistic bound cannot reach the top results are cut. The bound is not strict for bench cover, so very close alternatives can be missed.
 
 ### Transfer-screen assumptions
 
-- Bank is £3.4m and 2 free transfer(s), from bank from current-team.md, free transfers from current-team.md.
+- Bank is £2.3m and 1 free transfer(s), from bank from current-team.md, free transfers from current-team.md.
 - Markdown prices are provisional selling proceeds unless overridden with --selling-prices JSON. FPL selling prices can differ from market prices because only half of a price rise is retained.
 - Incoming prices are from the latest eligible local playerstats snapshot, already in £m. No price-change forecasts are made.
 - All moves happen before the first gameweek; the resulting squad is held for the entire horizon. Hits cost four points per transfer beyond the supplied free transfers, paid once. No chips or later transfers are modelled.
@@ -181,7 +172,7 @@ The Monte Carlo model shares goal events within a match; the faster screening mo
 
 ## Sources and reproduction
 
-Data: [FPL-Core-Insights](https://github.com/olbauday/FPL-Core-Insights), pinned as a Git submodule. Data revision: `92a90c264434ec1c7ea5e18198c71a0de1e78ae6`. Team input SHA-256: `e1595dfaf98437ea01fd4930736597ff4d41267815e0f00f05a016f57a2453c3`.
+Data: [FPL-Core-Insights](https://github.com/olbauday/FPL-Core-Insights), pinned as a Git submodule. Data revision: `0bbd5722d2f6414be2f855afbbff574755b6c9b6`. Team input SHA-256: `2f8089b840426f7c08bde64a4d8ff85209655ed4f91ba62b5da72c3977a76240`.
 
 Rules: [official scoring guide](https://www.premierleague.com/en/news/2174909) and [official transfer guide](https://www.premierleague.com/en/news/2174907), checked 9 October 2026. Four points are deducted for each transfer beyond the free allowance; selling proceeds can differ from the current buying price.
 
